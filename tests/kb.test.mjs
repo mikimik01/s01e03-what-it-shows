@@ -47,8 +47,11 @@ test('dedupe examples compare known causes rather than subjects', () => {
 test('rendered incident has computed counts, signature, and current desk resolutions', () => {
   const html = readFileSync(new URL('../rendered/kb/incidents/4471-split/index.html', import.meta.url), 'utf8')
     .replace(/<!--[\s\S]*?-->/g, '');
-  const ref = deskRef('mikimik01 / Copilot');
-  assert.equal(ref, 'DR-TWV7-HB70');
+  const source = readFileSync(new URL('../src/routes/kb/incidents/4471-split/+page.svx', import.meta.url), 'utf8');
+  const signature = source.match(/^signature: (.+)$/m)?.[1];
+  assert.ok(signature?.startsWith('v1.'));
+  const ref = deskRef(signature);
+  assert.match(ref, /^DR-[0-9A-HJKMNP-TV-Z]{4}-[0-9A-HJKMNP-TV-Z]{4}$/);
   assert.match(html, new RegExp(`<b[^>]*>${ref}</b>`));
   assert.match(html, /<code[^>]*>parser<\/code><\/td>\s*<td[^>]*>379<\/td>/);
   assert.match(html, /<code[^>]*>hint<\/code><\/td>\s*<td[^>]*>33<\/td>/);

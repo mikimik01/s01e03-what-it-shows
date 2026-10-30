@@ -4,7 +4,7 @@ title: '#4471 · evidence, separate causes, and follow-up'
 owner: mikimik01 / Copilot
 status: closed
 reviewed: 2026-10-30
-signature: mikimik01 / Copilot
+signature: v1.eyJzdG9yeSI6Im9mZiIsInN1YiI6IjM0MjkiLCJhdWQiOiJjaGFsbGVuZ2U6d2hhdC1pdC1zaG93cyIsImlhdCI6MTc5MzM1NzU3NSwiZXhwIjoxNzkzNDQzOTc1fQ.unoAHpZ9mDisbbAQ_RxcMV-8dJnlepYpsJa1Ank8_Lk
 ---
 
 <script>
