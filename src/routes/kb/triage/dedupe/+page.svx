@@ -1,0 +1,50 @@
+---
+layout: runbook
+title: 'Triage: duplicate reports'
+owner: support desk
+status: accepted
+reviewed: 2026-10-30
+---
+
+<script>
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+</script>
+
+A busy morning can bring similar reports about different problems. Keep one
+ticket per demonstrated cause within the same product. Merge only reports that
+the evidence supports as duplicates.
+
+## The rule
+
+[Decision 0002](/kb/decisions/0002-dedupe-by-cause) replaces the
+[subject-only decision 0001](/kb/decisions/0001-dedupe-by-subject), which remains
+unchanged as a historical record.
+
+1. Establish the product and read the report body. Find the tenant, its locale,
+   the booking form version, and the channel used for this report.
+2. Compare the demonstrated mechanism with an existing issue. In the exported
+   `sched-prod` date reports, use `tenantOf`, `causeOf`, and `sameCause` from
+   `src/lib/kb`, not the browser locale or intake tag.
+3. Merge only when the cause is known and matches within the same product.
+   Count each report ID once, even if the export repeats it.
+4. If the cause differs, keep a separate issue. If context is missing or the
+   body contradicts the classification, preserve the uncertainty and investigate.
+
+<Callout>
+Matching subjects can hide different causes. Different subjects can describe the
+same cause. An unknown tenant is not proof of duplication.
+</Callout>
+
+## Try it
+
+<DedupeExplorer />
+
+## When you are unsure
+
+Do not merge on a subject match alone. Ask for the missing context and preserve
+the original report. The live example rejects an unknown cause even when both
+subjects match.
+
+The [signed review of #4471](/kb/incidents/4471-split) links the separate parser
+and form-hint issues and retains the desk's unexplained one-day observations.

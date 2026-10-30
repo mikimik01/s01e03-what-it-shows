@@ -1,0 +1,48 @@
+---
+layout: runbook
+title: '#4471 · date reports split by cause'
+owner: support desk
+status: triaged
+reviewed: 2026-10-30
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+</script>
+
+Since April, people have reported bookings landing on the wrong day. The export
+dated 4 October records what was received and what was merged into this source ticket.
+
+The desk marked the ticket known and claimed one parser fix would cover it. The
+tenant directory and entry paths do not support that claim: the shared parser and
+the booking-v3 date hint fail in different ways.
+
+<Callout>
+Split by cause. A known status is not evidence that every report has the same cause
+or that either problem is fixed.
+</Callout>
+
+The [signed review](/kb/incidents/4471-split) explains the evidence and uncertainty.
+Track the [parser issue](https://github.com/mikimik01/s01e03-what-it-shows/issues/2)
+separately from the
+[form-hint issue](https://github.com/mikimik01/s01e03-what-it-shows/issues/1).
+
+## What was merged
+
+<CauseTable ticket={4471} />
+
+## Since April
+
+<QueueTimeline ticket={4471} />
+
+## Current triage
+
+Deduplicate report IDs before counting, then resolve the tenant's locale, form,
+and report channel. Browser-derived intake tags are clues, not cause labels.
+Read the timeline as received versus merged: a merge spike does not establish
+when the problem started.
+
+Use [decision 0002](/kb/decisions/0002-dedupe-by-cause) and the
+[current triage rule](/kb/triage/dedupe). The old subject-only rule is superseded.

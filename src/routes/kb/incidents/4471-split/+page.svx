@@ -1,0 +1,93 @@
+---
+layout: runbook
+title: '#4471 · evidence, separate causes, and follow-up'
+owner: mikimik01 / Copilot
+status: triaged
+reviewed: 2026-10-30
+signature: mikimik01 / Copilot
+---
+
+<script>
+  import Callout from '#lib/kb/Callout.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+The desk's [original incident page](/kb/incidents/4471) described a known
+month-first parser problem and assumed the entire merged ticket needed one fix.
+The export instead shows separate mechanisms within `sched-prod`.
+
+This review uses the export dated 4 October, not a live ticket-system feed.
+Keep incoming desk updates separate from this snapshot and re-run the views
+before changing the counts.
+
+## Separate engineering issues
+
+- [Shared parser reads month first](https://github.com/mikimik01/s01e03-what-it-shows/issues/2).
+  A day-first tenant's app/email dates, and dates through booking-v2, reach the
+  shared month-first parser. An intended 7 April can become 4 July.
+- [Booking-v3 hint disagrees with the form's parser](https://github.com/mikimik01/s01e03-what-it-shows/issues/1).
+  For day-first tenants, the form prints `MM/DD/YYYY` while reading the tenant's
+  order. Following that hint for 6 August can produce 8 June. Correcting the
+  shared parser does not correct this hint.
+
+## Counts derived from the export
+
+<CauseTable ticket={4471} />
+
+`uniqueById` removes overlapping export rows before the view selects reports
+merged into the source ticket. `tenantOf` resolves the tenant directory, and
+`causeOf` uses the tenant's date order, form version, and report channel.
+`dayFirst` asks `Intl.DateTimeFormat` for the locale's date-part order rather
+than maintaining a guessed list of European locales.
+
+The intake-tag column is deliberately separate from the cause. Intake guessed
+from the reporter's browser; its labels disagree in both directions. The table
+counts by cause, not by those labels. A booking-v3 tenant's app/email reports
+are not automatically form-hint reports.
+
+## Evidence and uncertainty
+
+`R-41200` is a parser example: harbour.dental uses `en-GB` and booking-v2, and
+the app report describes 7 April becoming 4 July. `R-41205` also takes the
+parser path despite an `en-US` browser and an intake tag of `hint`: the actual
+tenant is morrow.tax, using `fr-FR` and booking-v2.
+
+`R-41241` is a hint example: alder.physio uses `de-DE` and booking-v3, and the
+report came through the form. `R-41230` and `R-41251` take the same form-hint
+path for copper.studio and pale.harbour even though intake called them `parser`.
+
+<Callout>
+The desk's one-day observations are unresolved, not proof of a timezone cause.
+The count footnote shows where the supplied classifier files them. Retain the
+reports and investigate the mismatch instead of silently excluding them or
+claiming a confirmed additional bug.
+</Callout>
+
+The flagged IDs are `R-41202`, `R-41209`, `R-41236`, `R-41344`, and `R-41620`.
+Their bodies include a one-day shift, an invite apparently preceding a booking,
+and different weekdays reported in Lisbon and Toronto. Those observations do
+not establish a common mechanism. The parser issue explicitly retains them
+for follow-up under the supplied classification.
+
+## Received is not merged
+
+<QueueTimeline ticket={4471} />
+
+Reports were arriving before July. A later batch of merges records a desk action,
+not the start of the defect or a sudden burst of newly received reports. Read
+both series and their dates before making a claim about incident onset.
+
+## The rule that replaces subject-only merging
+
+Use the [current triage procedure](/kb/triage/dedupe) and
+[decision 0002](/kb/decisions/0002-dedupe-by-cause). Confirm the same product and
+cause before merging. A matching subject does not make the parser and form hint
+one issue; different subjects do not make reports of the same parser bug
+different issues. Unknown tenant context is not a match.
+
+Decision 0001 remains unchanged as an accepted historical record. A `known`
+ticket status and an old review date do not override the current evidence.
+
+<RenderStamp {signature} />

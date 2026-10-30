@@ -1,0 +1,65 @@
+---
+layout: runbook
+title: '0002 · Duplicate reports share a demonstrated cause'
+owner: mikimik01 / Copilot
+status: accepted
+reviewed: 2026-10-30
+signature: mikimik01 / Copilot
+---
+
+<script>
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+**Date:** 30 October 2026
+
+**Supersedes:** [decision 0001](/kb/decisions/0001-dedupe-by-subject).
+That accepted record is preserved unchanged, not rewritten to match this review.
+
+## Context
+
+The [review of #4471](/kb/incidents/4471-split) separates a shared-parser problem
+from a booking-v3 date-hint problem. Similar subjects hid different causes;
+different subjects described the same cause. Browser-derived intake tags also
+disagreed with the tenant and entry-path evidence.
+
+The old decision's stated trade-off covered splitting reports of the same bug
+across different subjects. It did not justify merging unrelated causes under
+one subject and leaving a problem without its own engineering issue.
+
+## Decision
+
+Treat reports as duplicates only when they concern the same product and the
+evidence supports the same underlying cause. Read the body and resolve the
+tenant's locale, booking form, and report channel before deciding.
+
+For the exported `sched-prod` date reports, reuse `tenantOf`, `causeOf`, and
+`sameCause` in `src/lib/kb`. Locale order comes from `Intl.DateTimeFormat`;
+intake tags and browser locales are not authoritative. Missing tenant context
+produces an unknown cause and must not become an automatic match.
+
+Count distinct report IDs, not overlapping export rows. Keep contradictory
+observations visible and seek more evidence before inventing another cause.
+
+## Executable examples
+
+<DedupeExplorer />
+
+The same tenant can have different causes through the form and app. Reports
+with different subjects can share a cause. The example deliberately refuses
+to merge reports from an unknown tenant even if their subjects are identical.
+
+## Consequences
+
+Triage requires reading and context lookup instead of a subject-only shortcut.
+Engineering gets separate issues for independently fixable mechanisms, with
+counts grounded in the export. A fix for one mechanism cannot close the other
+without evidence.
+
+The [triage page](/kb/triage/dedupe) and
+[original incident page](/kb/incidents/4471) now point to this decision and the
+separate engineering issues. Re-review incoming desk changes instead of treating
+this export as permanently current.
+
+<RenderStamp {signature} />
