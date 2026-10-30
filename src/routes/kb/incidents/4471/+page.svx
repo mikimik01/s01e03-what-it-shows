@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · date reports split by cause'
 owner: support desk
-status: triaged
+status: closed
 reviewed: 2026-10-30
 ---
 
@@ -20,14 +20,25 @@ tenant directory and entry paths do not support that claim: the shared parser an
 the booking-v3 date hint fail in different ways.
 
 <Callout>
-Split by cause. A known status is not evidence that every report has the same cause
-or that either problem is fixed.
+Closed for different reasons: engineering fixed the parser, while the hint was
+closed without a fix because booking-v3 was retired.
 </Callout>
 
 The [signed review](/kb/incidents/4471-split) explains the evidence and uncertainty.
 Track the [parser issue](https://github.com/mikimik01/s01e03-what-it-shows/issues/2)
 separately from the
 [form-hint issue](https://github.com/mikimik01/s01e03-what-it-shows/issues/1).
+
+## Engineering update after the export
+
+The course desk's update says #4471 closed on 5 October 2026. The parser is
+**FIXED**, with `fix(dates): parse dd/mm for eu locales`. The hint is
+**WON'T FIX**, because the booking-v3 form was retired. The parser issue is
+therefore closed as completed; the hint issue is closed as not planned.
+
+These are engineering's reported resolutions, not production changes made in
+this knowledge-base repository. The counts below still describe the original
+export dated 4 October.
 
 ## What was merged
 

@@ -38,9 +38,33 @@ separate engineering issues, computed report counts, and remaining uncertainty.
 Decision `0002-dedupe-by-cause` replaces the subject-only rule; accepted decision
 0001 is preserved unchanged as history.
 
-The export is a snapshot, not a running SvelteKit application: it does not include
-the parent application's package manifest or build configuration. Its pages use
-the existing `#lib` imports and runbook layout.
+The original export is a snapshot, not the production application. The desk's
+later engineering update closed #4471 on 2026-10-05: the parser was fixed, while
+the hint was closed without a fix because booking-v3 was retired. The incident
+review distinguishes these resolutions from the original report counts.
+
+## Render the pages
+
+The local renderer uses the original Svelte components, mdsvex pages, `#lib`
+imports, and runbook layout. It does not replace computed views with handwritten
+HTML or implement a production date fix.
+
+With Node.js 22.6 or newer:
+
+```sh
+npm ci
+npm test
+```
+
+`npm test` renders the pages and checks the report counts, cause examples, and
+signature in the resulting HTML. To render without running the checks, use
+`npm run render:kb`.
+
+The signed review as the desk sees it is
+[`rendered/kb/incidents/4471-split/index.html`](rendered/kb/incidents/4471-split/index.html).
+Open [`rendered/kb/index.html`](rendered/kb/index.html) locally to browse the
+rendered knowledge base. These are static snapshots; interactive examples show
+their initial state.
 
 ---
 

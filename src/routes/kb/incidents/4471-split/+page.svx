@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · evidence, separate causes, and follow-up'
 owner: mikimik01 / Copilot
-status: triaged
+status: closed
 reviewed: 2026-10-30
 signature: mikimik01 / Copilot
 ---
@@ -21,6 +21,22 @@ The export instead shows separate mechanisms within `sched-prod`.
 This review uses the export dated 4 October, not a live ticket-system feed.
 Keep incoming desk updates separate from this snapshot and re-run the views
 before changing the counts.
+
+## Engineering update: different closure reasons
+
+The [course desk update](https://hq.mega.dev/challenges/what-it-shows) reports
+that #4471 closed on **5 October 2026**, after the export:
+
+- **Parser: FIXED**, with `fix(dates): parse dd/mm for eu locales`. Its
+  engineering issue is closed as **completed**.
+- **Hint: WON'T FIX**, because the **booking-v3 form was retired**. Its
+  engineering issue is closed as **not planned**, not as a delivered fix.
+
+This supersedes the earlier snapshot's statement that a fix was merely queued.
+The engineering team reported the parser fix; this repository neither
+implements it nor independently verifies production behavior. Retirement
+explains the hint issue's closure without claiming that the hint was corrected.
+Neither resolution changes how the original reports are counted.
 
 ## Separate engineering issues
 
@@ -89,5 +105,7 @@ different issues. Unknown tenant context is not a match.
 
 Decision 0001 remains unchanged as an accepted historical record. A `known`
 ticket status and an old review date do not override the current evidence.
+Likewise, a closed status alone does not distinguish a fix from a retired
+feature: retain the desk's reason for each closure.
 
 <RenderStamp {signature} />
